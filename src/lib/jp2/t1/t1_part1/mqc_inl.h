@@ -111,7 +111,7 @@ static INLINE uint32_t mqc_raw_decode(mqc_t *mqc)
         }
     }
     mqc->ct--;
-    d = ((uint32_t)mqc->c >> mqc->ct) & 0x01U;
+    d = (mqc->c >> mqc->ct) & 0x01U;
 
     return d;
 }

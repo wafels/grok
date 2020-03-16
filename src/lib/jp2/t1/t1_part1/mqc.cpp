@@ -304,7 +304,7 @@ void mqc_flush(mqc_t *mqc)
     }
 }
 
-#define BYPASS_CT_INIT  0xDEADBEEF
+#define BYPASS_CT_INIT  0xF
 
 void mqc_bypass_init_enc(mqc_t *mqc)
 {
