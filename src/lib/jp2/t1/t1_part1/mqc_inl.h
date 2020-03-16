@@ -57,15 +57,20 @@
 #pragma once
 
 
+
+typedef struct mqc_state mqc_state_t;
+extern const mqc_state_t mqc_states[47 * 2];
+
+
 /* For internal use of mqc_decode_macro() */
 #define mqc_mpsexchange_macro(d, curctx, a) \
 { \
     if (a < (*curctx)->qeval) { \
         d = (*curctx)->mps ^ 1; \
-        *curctx = (*curctx)->nlps; \
+        *curctx = mqc_states + (*curctx)->nlps; \
     } else { \
         d = (*curctx)->mps; \
-        *curctx = (*curctx)->nmps; \
+        *curctx = mqc_states + (*curctx)->nmps; \
     } \
 }
 
@@ -75,11 +80,11 @@
     if (a < (*curctx)->qeval) { \
         a = (*curctx)->qeval; \
         d = (*curctx)->mps; \
-        *curctx = (*curctx)->nmps; \
+        *curctx = mqc_states + (*curctx)->nmps; \
     } else { \
         a = (*curctx)->qeval; \
         d = (*curctx)->mps ^ 1; \
-        *curctx = (*curctx)->nlps; \
+        *curctx = mqc_states + (*curctx)->nlps; \
     } \
 }
 

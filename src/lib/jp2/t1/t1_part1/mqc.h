@@ -65,9 +65,9 @@ typedef struct mqc_state {
     /** the Most Probable Symbol (0 or 1) */
     uint8_t mps : 1;
     /** next state if the next encoded symbol is the MPS */
-    const struct mqc_state *nmps;
+    uint8_t nmps;
     /** next state if the next encoded symbol is the LPS */
-    const struct mqc_state *nlps;
+    uint8_t nlps;
 } mqc_state_t;
 
 #define MQC_NUMCTXS 19
