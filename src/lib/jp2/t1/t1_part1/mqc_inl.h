@@ -67,10 +67,10 @@ extern const mqc_state_t mqc_states[47 * 2];
 { \
 	auto state = (mqc_states + *curctx); \
     if (a < state->qeval) { \
-        d = !state->mps; \
+        d = !(*curctx & 1); \
         *curctx = state->nlps; \
     } else { \
-        d = state->mps; \
+        d = *curctx & 1; \
         *curctx = state->nmps; \
     } \
 }
@@ -81,11 +81,11 @@ extern const mqc_state_t mqc_states[47 * 2];
 	auto state = (mqc_states + *curctx); \
     if (a < state->qeval) { \
         a = state->qeval; \
-        d = state->mps; \
+        d = *curctx & 1; \
         *curctx = state->nmps; \
     } else { \
         a = state->qeval; \
-        d = !(state->mps); \
+        d = !(*curctx & 1); \
         *curctx = state->nlps; \
     } \
 }
@@ -177,7 +177,7 @@ static INLINE uint32_t mqc_raw_decode(mqc_t *mqc)
             mqc_mpsexchange_macro(d, curctx, a); \
             mqc_renormd_macro(mqc, a, c, ct); \
         } else { \
-            d = state->mps; \
+            d = (*curctx)&1; \
         } \
     } \
 }
