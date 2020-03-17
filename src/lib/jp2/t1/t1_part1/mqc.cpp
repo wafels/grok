@@ -212,29 +212,31 @@ static void mqc_renorme(mqc_t *mqc)
 
 static void mqc_codemps(mqc_t *mqc)
 {
-    mqc->a -= (*mqc->curctx)->qeval;
+	auto state = (mqc_states + (*mqc->curctx));
+    mqc->a -=  state->qeval;
     if ((mqc->a & 0x8000) == 0) {
-        if (mqc->a < (*mqc->curctx)->qeval) {
-            mqc->a = (*mqc->curctx)->qeval;
+        if (mqc->a < state->qeval) {
+            mqc->a = state->qeval;
         } else {
-            mqc->c += (*mqc->curctx)->qeval;
+            mqc->c += state->qeval;
         }
-        *mqc->curctx = mqc_states +(*mqc->curctx)->nmps;
+        *mqc->curctx = state->nmps;
         mqc_renorme(mqc);
     } else {
-        mqc->c += (*mqc->curctx)->qeval;
+        mqc->c += state->qeval;
     }
 }
 
 static void mqc_codelps(mqc_t *mqc)
 {
-    mqc->a -= (*mqc->curctx)->qeval;
-    if (mqc->a < (*mqc->curctx)->qeval) {
-        mqc->c += (*mqc->curctx)->qeval;
+	auto state = (mqc_states + (*mqc->curctx));
+    mqc->a -= state->qeval;
+    if (mqc->a < state->qeval) {
+        mqc->c += state->qeval;
     } else {
-        mqc->a = (*mqc->curctx)->qeval;
+        mqc->a = state->qeval;
     }
-    *mqc->curctx = mqc_states + (*mqc->curctx)->nlps;
+    *mqc->curctx = state->nlps;
     mqc_renorme(mqc);
 }
 
@@ -280,7 +282,7 @@ void mqc_init_enc(mqc_t *mqc, uint8_t *bp)
 
 void mqc_encode(mqc_t *mqc, uint32_t d)
 {
-    if ((*mqc->curctx)->mps == d) {
+    if ((mqc_states + (*mqc->curctx))->mps == d) {
         mqc_codemps(mqc);
     } else {
         mqc_codelps(mqc);
@@ -497,7 +499,7 @@ void mqc_resetstates(mqc_t *mqc)
 {
     uint32_t i;
     for (i = 0; i < MQC_NUMCTXS; i++) {
-        mqc->ctxs[i] = mqc_states;
+        mqc->ctxs[i] = 0;
     }
 	mqc_setstate(mqc, T1_CTXNO_UNI, 0, 46);
 	mqc_setstate(mqc, T1_CTXNO_AGG, 0, 3);
@@ -507,7 +509,7 @@ void mqc_resetstates(mqc_t *mqc)
 void mqc_setstate(mqc_t *mqc, uint32_t ctxno, uint32_t msb,
                       int32_t prob)
 {
-    mqc->ctxs[ctxno] = &mqc_states[msb + (uint32_t)(prob << 1)];
+    mqc->ctxs[ctxno] = msb + (uint32_t)(prob << 1);
 }
 
 }

@@ -71,7 +71,7 @@ namespace grk {
 
 #include "t1_luts.h"
 #define T1_FLAGS(x, y) (t1->flags[x + 1 + ((y / 4) + 1) * (t1->w+2)])
-#define t1_setcurctx(curctx, ctxno)  curctx = &(mqc)->ctxs[(uint32_t)(ctxno)]
+#define t1_setcurctx(curctx, ctxno)  curctx = ((mqc)->ctxs + (ctxno))
 
 static INLINE uint8_t 	t1_getctxno_zc(mqc_t *mqc, uint32_t f);
 static INLINE uint32_t 	t1_getctxno_mag(uint32_t f);
