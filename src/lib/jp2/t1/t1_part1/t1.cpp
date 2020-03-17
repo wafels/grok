@@ -111,7 +111,7 @@ static INLINE uint8_t 	t1_getctxno_zc(mqc_t *mqc, uint32_t f) {
 }
 
 static INLINE uint8_t t1_getctxtno_sc_or_spb_index(uint32_t fX,
-		uint32_t nfX, uint32_t ci) {
+		uint32_t pfX, uint32_t nfX, uint32_t ci) {
 	/*
 	 0 pfX T1_CHI_THIS           T1_LUT_SGN_W
 	 1 tfX T1_SIGMA_1            T1_LUT_SIG_N
@@ -193,8 +193,8 @@ static INLINE void t1_update_flags(grk_flag *flagsp, uint32_t ci, uint32_t s,
 
 static INLINE void t1_enc_sigpass_step(t1_info *t1, grk_flag *flagsp,
 										int32_t *datap, int32_t bpno, int32_t one, int32_t *nmsedec,
-										uint8_t type, uint32_t ci, uint32_t vsc) {
-	uint32_t v;
+		uint8_t type, uint8_t ci, uint32_t vsc) {
+	uint8_t v;
 	auto mqc = &(t1->mqc);
 	uint32_t const flags = *flagsp;
 
@@ -215,8 +215,7 @@ static INLINE void t1_enc_sigpass_step(t1_info *t1, grk_flag *flagsp,
 			uint8_t lu = t1_getctxtno_sc_or_spb_index(*flagsp,
 			flagsp[-1], flagsp[1], ci);
 			uint32_t ctxt2 = t1_getctxno_sc(lu);
-
-			v = *datap < 0 ? 1U : 0U;
+			v = !!(*datap < 0);
 			*nmsedec += t1_getnmsedec_sig((uint32_t) abs(*datap),(uint32_t) bpno);
 #ifdef DEBUG_ENC_SIG
             fprintf(stderr, "   ctxt2=%d\n", ctxt2);
