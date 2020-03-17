@@ -154,7 +154,7 @@ static INLINE uint32_t mqc_raw_decode(mqc_t *mqc)
         if (ct == 0) { \
             mqc_bytein_macro(mqc, c, ct); \
         } \
-        a <<= 1; \
+        a = (uint16_t)(a << 1); \
         c <<= 1; \
         ct--; \
     } while (a < 0x8000); \
@@ -185,8 +185,8 @@ static INLINE uint32_t mqc_raw_decode(mqc_t *mqc)
 #define DOWNLOAD_MQC_VARIABLES(mqc, curctx, c, a, ct) \
          uint8_t *curctx = mqc->curctx; \
          uint32_t c = mqc->c; \
-         uint32_t a = mqc->a; \
-         uint32_t ct = mqc->ct
+        register uint16_t a = mqc->a; \
+        register uint8_t ct = mqc->ct
 
 #define UPLOAD_MQC_VARIABLES(mqc, curctx, c, a, ct) \
         mqc->curctx = curctx; \
