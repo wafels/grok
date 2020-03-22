@@ -1,4 +1,7 @@
 
+obj-x86_64-linux-gnu
+debian/tmp
+
 #Ignore thumbnails created by Windows
 Thumbs.db
 #Ignore files built by Visual Studio
